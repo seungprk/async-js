@@ -37,7 +37,7 @@ const fs = require('fs');
 // EXAMPLE USAGE 
 // countWords('hello world Hello me') --> 'hello: 2\nme:1\nworld: 1\n'
 const countWords = function(paragraph) {
-  let words = paragraph.trim('.').split(' ');
+  let words = paragraph.trim().replace(/[.]|[,]/g, '').split(' ');
 
   let wordBank = {};
 
@@ -67,4 +67,13 @@ const countWords = function(paragraph) {
 // countAllWords('./input.txt', './output.txt') --> should output a .txt file in same directory
 var countAllWords = function(inputFile, outputFile) {
   /* WRITE CODE HERE */ 
+  fs.readFile(inputFile, (err, data) => {
+    if (err) { throw err; }
+    var convertedStr = countWords(data.toString());
+    fs.writeFile(outputFile, convertedStr, (err) => {
+      if (err) { throw err; }
+    })
+  });
 }
+
+countAllWords('./input.txt', './output.txt');
